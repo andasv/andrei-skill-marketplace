@@ -1,15 +1,13 @@
 {
-  "mcpServers": {
-    "elternportal": {
-      "command": "python",
-      "args": ["-m", "elternportal_mcp"],
-      "cwd": "${CLAUDE_PLUGIN_ROOT}",
-      "env": {
-        "ELTERNPORTAL_URL": "",
-        "ELTERNPORTAL_USER": "",
-        "ELTERNPORTAL_PASSWORD": "",
-        "ANTHROPIC_API_KEY": ""
-      }
+  "elternportal": {
+    "command": "python",
+    "args": ["-m", "elternportal_mcp"],
+    "cwd": "${CLAUDE_PLUGIN_ROOT}",
+    "env": {
+      "ELTERNPORTAL_URL": "${ELTERNPORTAL_URL}",
+      "ELTERNPORTAL_USER": "${ELTERNPORTAL_USER}",
+      "ELTERNPORTAL_PASSWORD": "${ELTERNPORTAL_PASSWORD}",
+      "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
     }
   }
 }
