@@ -68,7 +68,7 @@ Sends emails through Amazon SES. Features:
 - Reply-To and sender display name
 - Dry-run mode for testing
 
-**Prerequisites:** AWS CLI, Python 3, verified SES sender identity. Set `SES_FROM_ADDRESS` and `SES_AWS_REGION` environment variables.
+**Prerequisites:** [AWS API MCP Server](https://github.com/awslabs/mcp) (`awslabs.aws-api-mcp-server`) configured with SES permissions.
 
 ### podcast-skill
 
@@ -103,13 +103,9 @@ andrei-skill-marketplace/
 │   ├── aws-ses-mailer-skill/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
-│   │   ├── skills/
-│   │   │   └── aws-ses-mailer/
-│   │   │       └── SKILL.md
-│   │   └── scripts/
-│   │       ├── send_ses_email.sh
-│   │       ├── send_ses_raw.py
-│   │       └── check_ses_identity.sh
+│   │   └── skills/
+│   │       └── aws-ses-mailer/
+│   │           └── SKILL.md
 │   ├── podcast-skill/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
