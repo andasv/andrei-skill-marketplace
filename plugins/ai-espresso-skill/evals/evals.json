@@ -1,0 +1,47 @@
+{
+  "skill_name": "ai-espresso",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate today's AI espresso briefing",
+      "expected_output": "HTML file at ./output/YYYY-MM-DD.html with 5-8 strategic AI news items",
+      "files": [],
+      "expectations": [
+        "Output file exists at ./output/ with today's date in filename",
+        "HTML is valid and self-contained (inline CSS, no external deps)",
+        "Contains 'Frontier Labs Competition Update' section as the first content section",
+        "Frontier Labs section has at least 1 item",
+        "Total item count is between 5 and 8",
+        "Every item has all three parts: what happened, why it matters, what to watch",
+        "Every item includes at least one source link as clickable href",
+        "No items older than 48 hours are included",
+        "At least 2 of the 4 sections have content",
+        "No hype language (revolutionary, game-changing, unprecedented, etc.)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me my morning AI update",
+      "expected_output": "Same HTML briefing — tests alternate trigger phrasing",
+      "files": [],
+      "expectations": [
+        "Output file exists at ./output/",
+        "Frontier Labs section present and first",
+        "Item count between 5 and 8",
+        "Strategic analysis triple present on each item"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "What happened in AI today?",
+      "expected_output": "Same HTML briefing — tests conversational trigger",
+      "files": [],
+      "expectations": [
+        "Output file exists at ./output/",
+        "Contains at least one Frontier Labs item",
+        "All items have source links",
+        "Analysis follows the what happened / why it matters / what to watch format"
+      ]
+    }
+  ]
+}

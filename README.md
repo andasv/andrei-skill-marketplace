@@ -9,6 +9,7 @@ A plugin marketplace for [Claude Cowork](https://claude.ai/cowork). Install plug
 | `elternportal` | Substitution plans & parent letters from Eltern-Portal | school, vertretungsplan, elternbriefe |
 | `aws-ses-mailer` | Send emails via AWS SES with HTML, attachments, CC/BCC & dry-run | email, aws, ses, mailer |
 | `podcast-skill` | Generate a 2-person AI podcast with ElevenLabs voice synthesis | podcast, audio, elevenlabs, tts |
+| `ai-espresso` | Strategic morning AI news briefing as a self-contained HTML file | ai-news, briefing, espresso |
 
 ## Installation
 
@@ -26,6 +27,7 @@ In a Claude Cowork session:
 /plugin install elternportal@andrei-skill-marketplace
 /plugin install aws-ses-mailer@andrei-skill-marketplace
 /plugin install podcast-skill@andrei-skill-marketplace
+/plugin install ai-espresso@andrei-skill-marketplace
 ```
 
 ### 3. Use the skills
@@ -37,6 +39,7 @@ Once installed, skills are auto-discovered. You can invoke them directly:
 /elternportal:elternportal-elternbriefe
 /aws-ses-mailer:aws-ses-mailer
 /podcast-skill:podcast-skill
+/ai-espresso:ai-espresso
 ```
 
 Or just ask naturally — Cowork will match your request to the right skill:
@@ -44,6 +47,7 @@ Or just ask naturally — Cowork will match your request to the right skill:
 > "What substitutions are there today?"
 > "Send an email to alice@example.com with the weekly report attached"
 > "Create a podcast from today's AI news briefing"
+> "Give me an AI espresso for this morning"
 
 ## Plugin Details
 
@@ -75,6 +79,12 @@ Generates a professional 2-person podcast from any written content in three phas
 
 **Prerequisites:** Python 3 with pydub, ffmpeg, ElevenLabs MCP server configured.
 
+### ai-espresso
+
+Generates a strategic morning AI news briefing covering the last 24 hours. Searches for news from frontier labs and the broader AI industry, analyzes strategic significance, and outputs a self-contained HTML file.
+
+**Prerequisites:** Exa MCP server configured (for web search).
+
 ## Repository Structure
 
 ```
@@ -100,16 +110,24 @@ andrei-skill-marketplace/
 │   │       ├── send_ses_email.sh
 │   │       ├── send_ses_raw.py
 │   │       └── check_ses_identity.sh
-│   └── podcast-skill/
+│   ├── podcast-skill/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   ├── skills/
+│   │   │   └── podcast-skill/
+│   │   │       └── SKILL.md
+│   │   ├── personas/
+│   │   ├── references/
+│   │   └── scripts/
+│   │       └── merge_audio.py
+│   └── ai-espresso-skill/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── skills/
-│       │   └── podcast-skill/
+│       │   └── ai-espresso/
 │       │       └── SKILL.md
-│       ├── personas/
 │       ├── references/
-│       └── scripts/
-│           └── merge_audio.py
+│       └── evals/
 └── README.md
 ```
 

@@ -1,0 +1,4 @@
+output/*.html
+output/eval-*.json
+dist/
+.DS_Store

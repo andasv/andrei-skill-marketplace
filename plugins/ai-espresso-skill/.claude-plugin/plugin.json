@@ -1,0 +1,11 @@
+{
+  "name": "ai-espresso",
+  "version": "1.0.0",
+  "description": "Generate a strategic morning AI news briefing covering the last 24 hours, saved as a self-contained HTML file.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["ai-news", "briefing", "morning", "espresso", "frontier-labs"]
+}

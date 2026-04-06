@@ -39,6 +39,18 @@
       "repository": "https://github.com/andasv/andrei-skill-marketplace",
       "license": "MIT",
       "keywords": ["podcast", "audio", "elevenlabs", "tts", "voice"]
+    },
+    {
+      "name": "ai-espresso",
+      "source": "./plugins/ai-espresso-skill",
+      "description": "Generate a strategic morning AI news briefing covering the last 24 hours, saved as a self-contained HTML file.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/ai-espresso-skill",
+      "license": "MIT",
+      "keywords": ["ai-news", "briefing", "morning", "espresso", "frontier-labs"]
     }
   ]
 }
