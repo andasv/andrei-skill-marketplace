@@ -1,3 +1,0 @@
-[submodule "plugins/elternportal"]
-	path = plugins/elternportal
-	url = git@github.com:andasv/elternportal-skill.git
