@@ -1,8 +1,7 @@
 {
   "elternportal": {
-    "command": "python",
-    "args": ["-m", "elternportal_mcp"],
-    "cwd": "${CLAUDE_PLUGIN_ROOT}",
+    "command": "uvx",
+    "args": ["elternportal-mcp@latest"],
     "env": {
       "ELTERNPORTAL_URL": "${ELTERNPORTAL_URL}",
       "ELTERNPORTAL_USER": "${ELTERNPORTAL_USER}",

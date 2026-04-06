@@ -1,0 +1,34 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "elternportal-mcp"
+version = "2.1.0"
+description = "MCP server for Eltern-Portal — substitution plans, parent letters, bulletin board, and school calendar"
+readme = "MCP-SERVER.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Andrei Svirida" },
+]
+keywords = ["mcp", "elternportal", "school", "vertretungsplan", "elternbriefe"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "fastmcp>=2.0.0",
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "pymupdf>=1.24.0",
+    "anthropic>=0.40.0",
+]
+
+[project.scripts]
+elternportal-mcp = "elternportal_mcp.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/andasv/andrei-skill-marketplace"
+Repository = "https://github.com/andasv/andrei-skill-marketplace"
