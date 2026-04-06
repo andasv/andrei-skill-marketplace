@@ -22,8 +22,8 @@ def _get_config() -> tuple[str, str]:
 def send(
     message: str,
     title: str | None = None,
-    priority: int = 1,
-    sound: str | None = None,
+    priority: int = 2,
+    sound: str = "persistent",
     url: str | None = None,
     url_title: str | None = None,
     device: str | None = None,
@@ -33,8 +33,8 @@ def send(
     Args:
         message: The notification message (max 1024 chars, required)
         title: Message title (default: app name)
-        priority: -2 (lowest) to 2 (emergency). Default 1 (high, bypasses quiet hours)
-        sound: Notification sound (e.g. siren, spacealarm, persistent, pushover)
+        priority: -2 (lowest) to 2 (emergency). Default 2 (emergency, repeats until acknowledged)
+        sound: Notification sound. Default 'persistent' (long repeating alert)
         url: Supplementary URL to include
         url_title: Title for the URL
         device: Target a specific device name
@@ -52,7 +52,7 @@ def send(
     if priority is not None:
         data["priority"] = priority
         if priority == 2:
-            data["retry"] = 60
+            data["retry"] = 30
             data["expire"] = 3600
     if sound:
         data["sound"] = sound
