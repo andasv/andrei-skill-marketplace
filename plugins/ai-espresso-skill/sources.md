@@ -29,17 +29,18 @@ and their items take precedence in case of deduplication.
 
 ### P2 — Search-Based Discovery
 
-These are not fetched directly. Instead, Perplexity search queries are used
-to fill coverage gaps after P0 and P1 sources are processed.
+These are not fetched directly. Instead, Exa web search queries are used
+to fill coverage gaps after P0 and P1 sources are processed. Embed today's
+date in each query for recency filtering.
 
-| Query Template | Tool | Filter |
-|----------------|------|--------|
-| "Google Gemini AI announcements today {date}" | perplexity_ask | recency: day |
-| "AI industry news today {date}" | perplexity_ask | recency: day |
-| "new AI products tools launched today {date}" | perplexity_search | recency: day |
-| "LLM foundation model releases today {date}" | perplexity_search | recency: day |
-| "Germany AI news regulations enterprise {date}" | perplexity_ask | recency: day |
-| "German AI startups Aleph Alpha DeepL Helsing news {date}" | perplexity_search | recency: day |
+| Query Template | Tool | Notes |
+|----------------|------|-------|
+| "Google Gemini AI announcements today {date}" | mcp__exa__web_search_exa | numResults: 10 |
+| "AI industry news today {date}" | mcp__exa__web_search_exa | numResults: 10 |
+| "new AI products tools launched today {date}" | mcp__exa__web_search_exa | numResults: 10 |
+| "LLM foundation model releases today {date}" | mcp__exa__web_search_exa | numResults: 10 |
+| "Germany AI news regulations enterprise {date}" | mcp__exa__web_search_exa | numResults: 10 |
+| "German AI startups Aleph Alpha DeepL Helsing news {date}" | mcp__exa__web_search_exa | numResults: 10 |
 
 ---
 
@@ -49,6 +50,6 @@ To add a new source, append it to the appropriate priority table above.
 
 **Required fields:**
 - **Source**: Human-readable name
-- **Type**: `webpage` (HTML page to scrape), `rss` (RSS/Atom feed), or `search` (Perplexity query)
+- **Type**: `webpage` (HTML page to scrape), `rss` (RSS/Atom feed), or `search` (Exa query)
 - **URL** (for webpage/rss) or **Query Template** (for search)
 - **Fetch Notes** or **Filter**: Instructions for how to extract relevant items

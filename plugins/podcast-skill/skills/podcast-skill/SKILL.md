@@ -7,6 +7,16 @@ description: Generate a 2-person AI podcast from content (default input is AI Es
 
 Generate a professional 2-person podcast from written content using configurable personas and ElevenLabs voice synthesis.
 
+## MCP Dependencies
+
+This skill requires the following MCP server to be configured:
+
+| MCP Server | Purpose | Required Tools |
+|------------|---------|----------------|
+| **ElevenLabs** | Text-to-speech synthesis and audio playback | `mcp__ElevenLabs__text_to_speech`, `mcp__ElevenLabs__play_audio`, `mcp__ElevenLabs__search_voices` |
+
+The ElevenLabs MCP server handles API authentication internally. No API keys need to be configured in the skill itself.
+
 ## Parameters
 
 The user may provide these parameters when invoking the skill. Apply defaults for anything not specified.

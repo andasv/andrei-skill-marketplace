@@ -14,9 +14,8 @@ Extract all news items, their summaries, source links, and section assignments.
 
 Determine whether the newsletter captured the major AI stories of the day.
 
-1. Use `mcp__perplexity__perplexity_ask` with `search_recency_filter: "day"` to query:
-   "What were the most important AI news stories in the last 24 hours?"
-2. Extract the list of major stories from the Perplexity response.
+1. Use `mcp__exa__web_search_exa` with query "Most important AI news stories today {DATE}" and `numResults: 10`.
+2. Extract the list of major stories from the Exa search results.
 3. For each major story, check if the newsletter contains a matching item.
 4. Calculate: `coverage_score = matched_stories / total_major_stories`
 5. List any missed stories.

@@ -94,7 +94,7 @@ On quiet days it may be omitted.
 
 Curated picks most relevant to an engineering leader building with agentic
 AI, LLM APIs, and coding agents daily. Uses a **72-hour lookback**
-window and draws from ALL sources (primary + Perplexity).
+window and draws from ALL sources (primary + Exa search).
 
 **Relevance filter** — include news that directly affects:
 - LLM API changes, pricing, limits, or new capabilities

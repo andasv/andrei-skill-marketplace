@@ -8,13 +8,20 @@ description: Generate a strategic morning AI news briefing covering the last 24 
 Generate a concise, strategically analyzed AI news briefing covering the last 24 hours.
 The output is a self-contained HTML file saved to `./output/`.
 
+## MCP Dependencies
+
+This skill requires the following MCP server to be configured:
+
+| MCP Server | Purpose | Required Tools |
+|------------|---------|----------------|
+| **Exa** | Web search for gap-filling news coverage | `mcp__exa__web_search_exa` |
+
+The Exa MCP server handles API authentication internally. No API keys need to be configured in the skill itself.
+
 ## Tools Used
 
-This skill uses only built-in tools — no custom scripts or external dependencies:
-
+- **mcp__exa__web_search_exa** — Gap-fill web search queries for frontier labs, industry news, and Germany AI news (date filtering embedded in query text)
 - **WebFetch** — Fetch webpages (Anthropic News) and RSS feeds (OpenAI `news/rss.xml`, SMOL AI)
-- **mcp__perplexity__perplexity_ask** — Gap-fill queries for frontier labs, industry news, and Germany AI news (with `search_recency_filter: "day"`)
-- **mcp__perplexity__perplexity_search** — Targeted search queries for uncovered topic categories
 - **Read** — Load `sources.md`, `guidelines.md`, `references/html-template.md`, and previous editions from `./output/` for deduplication
 - **Glob** — Find previous edition HTML files in `./output/` for cross-checking (Phase 3.5)
 - **Write** — Save the generated HTML file to `./output/YYYY-MM-DD.html`
@@ -69,26 +76,28 @@ Collect all items into a working list. For each item, track:
 
 ---
 
-## Phase 3: Gap-Fill with Perplexity Search
+## Phase 3: Gap-Fill with Exa Search
 
 After processing primary sources, assess coverage:
 - Do you have at least 1 item about Anthropic, OpenAI, or Google Gemini competitive moves?
 - Do you have coverage across at least 2 of the 5 topic categories?
 - Do you have any Germany-specific AI news?
 
-Use Perplexity to fill gaps. Run up to 5 queries maximum:
+Use Exa to fill gaps. Run up to 5 queries maximum. Embed today's date in each query for recency:
 
-1. **Always run**: Use `mcp__perplexity__perplexity_ask` with query "What are the most important Anthropic, OpenAI, and Google Gemini AI announcements and competitive moves in the last 24 hours?" with `search_recency_filter: "day"`.
+1. **Always run**: Use `mcp__exa__web_search_exa` with query "Most important Anthropic OpenAI Google Gemini AI announcements competitive moves today {DATE}" and `numResults: 10`.
 
-2. **Always run**: Use `mcp__perplexity__perplexity_ask` with query "What are the biggest AI industry news stories today?" with `search_recency_filter: "day"`.
+2. **Always run**: Use `mcp__exa__web_search_exa` with query "Biggest AI industry news stories today {DATE}" and `numResults: 10`.
 
-3. **Always run**: Use `mcp__perplexity__perplexity_ask` with query "What are the latest AI news and developments in Germany today? Include EU AI Act implementation, German AI startups like Aleph Alpha and DeepL, enterprise AI adoption, data sovereignty, and government AI initiatives." with `search_recency_filter: "day"`.
+3. **Always run**: Use `mcp__exa__web_search_exa` with query "AI news developments Germany today {DATE} EU AI Act German AI startups Aleph Alpha DeepL enterprise AI data sovereignty" and `numResults: 10`.
 
-4. **If gaps remain**: Use `mcp__perplexity__perplexity_search` with targeted queries for uncovered topic categories with `search_recency_filter: "day"`.
+4. **If gaps remain**: Use `mcp__exa__web_search_exa` with targeted queries for uncovered topic categories, embedding today's date.
+
+Where `{DATE}` is the current date in human-readable format (e.g., "April 6 2026").
 
 For each new item discovered via search:
 - Check it is not a duplicate of an item already in the working list
-- Add it with source attribution from the Perplexity citations
+- Add it with source attribution from the Exa result URLs
 - Mark its topic category
 
 ---
@@ -114,7 +123,7 @@ Apply these rules in order:
 
 2. **Fill remaining slots by significance.** From the remaining items, select the most strategically significant ones. Balance across Models & Research, Products & Tools, and Industry & Business. Prefer fewer, deeper items over many shallow ones.
 
-3. **Cut to 8 maximum.** If you have more than 8 strong items, drop the least impactful ones. If you have fewer than 5, expand the Perplexity search scope (try `search_recency_filter: "week"` and manually filter to most recent).
+3. **Cut to 8 maximum.** If you have more than 8 strong items, drop the least impactful ones. If you have fewer than 5, expand the Exa search scope (broaden queries to cover the past week, e.g., "AI news this week {DATE}").
 
 ### Analysis
 
@@ -128,8 +137,8 @@ For each selected item, write the analysis as defined in `guidelines.md`:
 
 After selecting the main section items, separately curate the leader picks section:
 
-1. From ALL collected items (primary sources + Perplexity, using a **72-hour lookback**), filter for leadership relevance: LLM API changes, developer tooling, agentic workflows, enterprise deployment patterns, MCP/RAG/function calling, coding agents, competitive positioning signals.
-2. Run one additional Perplexity query if needed: `mcp__perplexity__perplexity_ask` with query "What are the latest Claude API, Claude Code, OpenAI API, coding agent, and developer AI tooling news in the last 3 days?" with `search_recency_filter: "week"`.
+1. From ALL collected items (primary sources + Exa, using a **72-hour lookback**), filter for leadership relevance: LLM API changes, developer tooling, agentic workflows, enterprise deployment patterns, MCP/RAG/function calling, coding agents, competitive positioning signals.
+2. Run one additional Exa query if needed: `mcp__exa__web_search_exa` with query "Claude API Claude Code OpenAI API coding agent developer AI tooling news past 3 days {DATE}" and `numResults: 10`.
 3. Exclude any story already covered in a previous day's `./output/` HTML file (from Phase 3.5 dedup), unless there is a material update.
 4. Select exactly 5 items. Each gets a 2-3 sentence summary explaining why it matters to an agentic AI engineering leader (technical decisions, team tooling, competitive landscape, deployment strategy).
 5. Items in this section MAY also appear in the main sections above — this is the only section where duplication is allowed, since it serves a different analytical lens.
