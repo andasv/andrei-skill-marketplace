@@ -1,6 +1,6 @@
 {
   "name": "elternportal",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Access Eltern-Portal school data: substitution plans, parent letters, bulletin board, and calendar events via MCP server.",
   "author": {
     "name": "Andrei Svirida"
