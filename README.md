@@ -4,12 +4,12 @@ A plugin marketplace for [Claude Cowork](https://claude.ai/cowork). Install plug
 
 ## Available Plugins
 
-| Plugin | Description | Keywords |
-|--------|-------------|----------|
-| `elternportal` | School data from Eltern-Portal: substitutions, letters, bulletin board, calendar | school, vertretungsplan, elternbriefe |
-| `aws-ses-mailer` | Send emails via AWS SES with HTML, attachments, CC/BCC & dry-run | email, aws, ses, mailer |
-| `podcast-skill` | Generate a 2-person AI podcast with ElevenLabs voice synthesis | podcast, audio, elevenlabs, tts |
-| `ai-espresso` | Strategic morning AI news briefing as a self-contained HTML file | ai-news, briefing, espresso |
+| Plugin | Description | MCP Server Required |
+|--------|-------------|---------------------|
+| `elternportal` | School data: substitutions, letters, bulletin board, calendar | [Eltern-Portal MCP](mcp/elternportal/) (included in this repo) |
+| `aws-ses-mailer` | Send emails via AWS SES with HTML, attachments, CC/BCC & dry-run | [AWS API MCP](https://github.com/awslabs/mcp) (`awslabs.aws-api-mcp-server`) |
+| `podcast-skill` | Generate a 2-person AI podcast with ElevenLabs voice synthesis | [ElevenLabs MCP](https://github.com/elevenlabs/elevenlabs-mcp) |
+| `ai-espresso` | Strategic morning AI news briefing as a self-contained HTML file | [Exa MCP](https://github.com/exa-labs/exa-mcp-server) |
 
 ## Installation
 
