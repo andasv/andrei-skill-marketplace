@@ -1,46 +1,11 @@
-#!/usr/bin/env python3
-"""Fetch Vertretungsplan (substitution plan) from Eltern-Portal as JSON.
+"""Fetch and parse Vertretungsplan (substitution plan) from Eltern-Portal."""
 
-Uses HTTP requests to authenticate and fetch HTML, then Claude to extract
-structured data from the page content via tool use with structured output.
-"""
-
-import json
-import sys
+import os
 from datetime import datetime
-from pathlib import Path
 
 import anthropic
 import requests
 from bs4 import BeautifulSoup
-from dotenv import dotenv_values
-
-
-def _find_env_file() -> Path:
-    """Walk up from script dir to find .env at the project root."""
-    d = Path(__file__).resolve().parent
-    for _ in range(10):
-        candidate = d / ".env"
-        if candidate.exists():
-            return candidate
-        d = d.parent
-    raise FileNotFoundError("Could not find .env file in any parent directory")
-
-
-_env = dotenv_values(_find_env_file())
-URL = _env.get("URL", "").rstrip("/")
-USER = _env.get("USER", "")
-PASSWORD = _env.get("PASSWORD", "")
-ANTHROPIC_API_KEY = _env.get("ANTHROPIC_API_KEY", "")
-
-_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "de-DE,de;q=0.9,en;q=0.8",
-}
 
 EXTRACTION_TOOL = {
     "name": "extract_vertretungsplan",
@@ -124,7 +89,6 @@ EXTRACTION_TOOL = {
     },
 }
 
-# Few-shot example HTML for prompting
 _FEW_SHOT_HTML = (
     "<div class='list bold full_width text_center'>Fr., 14.03.2026 - KW 11</div>"
     "<table class='table'>"
@@ -172,34 +136,8 @@ _FEW_SHOT_OUTPUT = {
 }
 
 
-def login(session: requests.Session) -> None:
-    """Authenticate against Eltern-Portal."""
-    resp = session.get(URL + "/")
-    resp.raise_for_status()
-    soup = BeautifulSoup(resp.text, "html.parser")
-    csrf_input = soup.find("input", {"name": "csrf"})
-    if not csrf_input:
-        raise RuntimeError("Could not find CSRF token on login page")
-
-    resp = session.post(
-        URL + "/includes/project/auth/login.php",
-        data={
-            "csrf": csrf_input["value"],
-            "username": USER,
-            "password": PASSWORD,
-            "go_to": "",
-        },
-        headers={"Referer": URL + "/", "Origin": URL},
-        allow_redirects=True,
-    )
-    resp.raise_for_status()
-    if "form-signin" in resp.text:
-        raise RuntimeError("Login failed — check credentials")
-
-
-def fetch_html(session: requests.Session) -> str:
-    """Fetch the Vertretungsplan page and return the main content HTML."""
-    resp = session.get(URL + "/service/vertretungsplan")
+def fetch_html(session: requests.Session, base_url: str) -> str:
+    resp = session.get(base_url + "/service/vertretungsplan")
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
     content = soup.find("div", id="asam_content")
@@ -214,9 +152,11 @@ def fetch_html(session: requests.Session) -> str:
 
 
 def extract_with_llm(html: str) -> dict:
-    """Use Claude to extract structured data from the HTML via tool use."""
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        raise RuntimeError("Missing ANTHROPIC_API_KEY environment variable")
 
+    client = anthropic.Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=2048,
@@ -271,26 +211,8 @@ def extract_with_llm(html: str) -> dict:
     raise RuntimeError("LLM did not return structured extraction")
 
 
-def main():
-    if not URL or not USER or not PASSWORD:
-        print(json.dumps({"error": "Missing URL, USER, or PASSWORD in .env"}))
-        sys.exit(1)
-    if not ANTHROPIC_API_KEY:
-        print(json.dumps({"error": "Missing ANTHROPIC_API_KEY in .env"}))
-        sys.exit(1)
-
-    session = requests.Session()
-    session.headers.update(_HEADERS)
-    try:
-        login(session)
-        html = fetch_html(session)
-        data = extract_with_llm(html)
-        data["retrieved_at"] = datetime.now().isoformat(timespec="seconds")
-        print(json.dumps(data, ensure_ascii=False, indent=2))
-    except Exception as e:
-        print(json.dumps({"error": str(e)}, ensure_ascii=False))
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
+def get_vertretungsplan(session: requests.Session, base_url: str) -> dict:
+    html = fetch_html(session, base_url)
+    data = extract_with_llm(html)
+    data["retrieved_at"] = datetime.now().isoformat(timespec="seconds")
+    return data

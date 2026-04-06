@@ -1,6 +1,6 @@
 {
   "name": "andrei-skill-marketplace",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "owner": {
     "name": "andasv"
   },
@@ -8,8 +8,8 @@
     {
       "name": "elternportal",
       "source": "./plugins/elternportal",
-      "description": "Skills for Eltern-Portal: substitution plans (Vertretungsplan) and parent letters (Elternbriefe)",
-      "version": "1.0.0",
+      "description": "Access Eltern-Portal school data: substitution plans, parent letters, bulletin board, and calendar events via MCP server.",
+      "version": "2.0.0",
       "author": {
         "name": "Andrei Svirida"
       },

@@ -6,7 +6,7 @@ A plugin marketplace for [Claude Cowork](https://claude.ai/cowork). Install plug
 
 | Plugin | Description | Keywords |
 |--------|-------------|----------|
-| `elternportal` | Substitution plans & parent letters from Eltern-Portal | school, vertretungsplan, elternbriefe |
+| `elternportal` | School data from Eltern-Portal: substitutions, letters, bulletin board, calendar | school, vertretungsplan, elternbriefe |
 | `aws-ses-mailer` | Send emails via AWS SES with HTML, attachments, CC/BCC & dry-run | email, aws, ses, mailer |
 | `podcast-skill` | Generate a 2-person AI podcast with ElevenLabs voice synthesis | podcast, audio, elevenlabs, tts |
 | `ai-espresso` | Strategic morning AI news briefing as a self-contained HTML file | ai-news, briefing, espresso |
@@ -53,11 +53,13 @@ Or just ask naturally — Cowork will match your request to the right skill:
 
 ### elternportal
 
-Fetches data from German school Eltern-Portal websites. Two skills:
-- **elternportal-vertretungsplan** — Retrieves the current substitution plan
-- **elternportal-elternbriefe** — Lists and fetches parent letters
+Access German school Eltern-Portal data via a dedicated MCP server. Tools:
+- **get_vertretungsplan** — Substitution plan with structured data
+- **list_elternbriefe** / **get_elternbrief** — Parent letters (PDF→markdown)
+- **get_schwarzes_brett** — Bulletin board announcements
+- **get_termine** — School calendar events
 
-**Prerequisites:** Eltern-Portal credentials configured via environment variables.
+**Prerequisites:** [Eltern-Portal MCP Server](mcp/elternportal/) configured with school credentials and ANTHROPIC_API_KEY.
 
 ### aws-ses-mailer
 
@@ -96,9 +98,7 @@ andrei-skill-marketplace/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json       # Plugin manifest
 │   │   └── skills/
-│   │       ├── elternportal-vertretungsplan/
-│   │       │   └── SKILL.md
-│   │       └── elternportal-elternbriefe/
+│   │       └── elternportal/
 │   │           └── SKILL.md
 │   ├── aws-ses-mailer-skill/
 │   │   ├── .claude-plugin/
@@ -124,6 +124,14 @@ andrei-skill-marketplace/
 │       │       └── SKILL.md
 │       ├── references/
 │       └── evals/
+├── mcp/
+│   └── elternportal/             # Eltern-Portal MCP server
+│       ├── elternportal_mcp/
+│       │   ├── server.py
+│       │   ├── auth.py
+│       │   └── parsers/
+│       ├── requirements.txt
+│       └── README.md
 └── README.md
 ```
 
