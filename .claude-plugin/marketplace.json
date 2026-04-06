@@ -6,10 +6,7 @@
   "plugins": [
     {
       "name": "elternportal",
-      "source": {
-        "source": "github",
-        "repo": "andasv/elternportal-skill"
-      },
+      "source": "./plugins/elternportal",
       "description": "Skills for Eltern-Portal: substitution plans (Vertretungsplan) and parent letters (Elternbriefe)",
       "version": "1.0.0",
       "author": {
