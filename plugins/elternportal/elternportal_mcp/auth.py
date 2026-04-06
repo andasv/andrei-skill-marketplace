@@ -1,9 +1,19 @@
 """Eltern-Portal authentication and session management."""
 
 import os
+from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
+
+# Load config from ~/.mcp-server-config/elternportal_mcp/.env (priority over env vars)
+_CONFIG_FILE = Path.home() / ".mcp-server-config" / "elternportal_mcp" / ".env"
+if _CONFIG_FILE.exists():
+    for line in _CONFIG_FILE.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip())
 
 _HEADERS = {
     "User-Agent": (
@@ -18,12 +28,13 @@ _session: requests.Session | None = None
 
 
 def _get_config() -> tuple[str, str, str]:
-    url = os.environ.get("ELTERNPORTAL_URL", "").rstrip("/")
-    user = os.environ.get("ELTERNPORTAL_USER", "")
-    password = os.environ.get("ELTERNPORTAL_PASSWORD", "")
+    url = (os.environ.get("ELTERNPORTAL_URL") or os.environ.get("URL", "")).rstrip("/")
+    user = os.environ.get("ELTERNPORTAL_USER") or os.environ.get("USER", "")
+    password = os.environ.get("ELTERNPORTAL_PASSWORD") or os.environ.get("PASSWORD", "")
     if not url or not user or not password:
         raise RuntimeError(
-            "Missing ELTERNPORTAL_URL, ELTERNPORTAL_USER, or ELTERNPORTAL_PASSWORD environment variables"
+            "Missing URL/USER/PASSWORD — set in ~/.mcp-server-config/elternportal_mcp/.env "
+            "or as ELTERNPORTAL_URL, ELTERNPORTAL_USER, ELTERNPORTAL_PASSWORD env vars"
         )
     return url, user, password
 
