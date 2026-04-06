@@ -10,11 +10,35 @@
       "description": "Skills for Eltern-Portal: substitution plans (Vertretungsplan) and parent letters (Elternbriefe)",
       "version": "1.0.0",
       "author": {
-        "name": "andasv"
+        "name": "Andrei Svirida"
       },
       "repository": "https://github.com/andasv/elternportal-skill",
       "license": "MIT",
       "keywords": ["elternportal", "school", "vertretungsplan", "elternbriefe"]
+    },
+    {
+      "name": "aws-ses-mailer",
+      "source": "./plugins/aws-ses-mailer-skill",
+      "description": "Send emails via AWS SES. Supports plain text, HTML, CC/BCC, reply-to, display name, file attachments, and dry-run mode.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/aws-ses-mailer-skill",
+      "license": "MIT",
+      "keywords": ["email", "aws", "ses", "mailer", "attachments"]
+    },
+    {
+      "name": "podcast-skill",
+      "source": "./plugins/podcast-skill",
+      "description": "Generate a 2-person AI podcast from written content using configurable personas and ElevenLabs voice synthesis.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/andrei-skill-marketplace",
+      "license": "MIT",
+      "keywords": ["podcast", "audio", "elevenlabs", "tts", "voice"]
     }
   ]
 }

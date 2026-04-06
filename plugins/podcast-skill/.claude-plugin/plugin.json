@@ -1,0 +1,11 @@
+{
+  "name": "podcast-skill",
+  "version": "1.0.0",
+  "description": "Generate a 2-person AI podcast from written content using configurable personas and ElevenLabs voice synthesis.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["podcast", "audio", "elevenlabs", "tts", "voice", "ai-news"]
+}
