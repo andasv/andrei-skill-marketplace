@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Skills for Eltern-Portal school websites: substitution plans and parent letters",
   "author": {
-    "name": "andasv"
-  }
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["elternportal", "school", "vertretungsplan", "elternbriefe"]
 }
