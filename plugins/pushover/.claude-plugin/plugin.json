@@ -1,0 +1,11 @@
+{
+  "name": "pushover",
+  "version": "1.0.0",
+  "description": "Send urgent push notifications to your phone via Pushover. Use when immediate reaction is needed.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["pushover", "notification", "alert", "urgent", "push"]
+}

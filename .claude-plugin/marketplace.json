@@ -1,6 +1,6 @@
 {
   "name": "andrei-skill-marketplace",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "owner": {
     "name": "andasv"
   },
@@ -52,6 +52,18 @@
       "repository": "https://github.com/andasv/ai-espresso-skill",
       "license": "MIT",
       "keywords": ["ai-news", "briefing", "morning", "espresso", "frontier-labs"]
+    },
+    {
+      "name": "pushover",
+      "source": "./plugins/pushover",
+      "description": "Send urgent push notifications to your phone via Pushover. Use when immediate reaction is needed.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/andrei-skill-marketplace",
+      "license": "MIT",
+      "keywords": ["pushover", "notification", "alert", "urgent", "push"]
     }
   ]
 }

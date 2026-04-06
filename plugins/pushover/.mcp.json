@@ -1,0 +1,6 @@
+{
+  "pushover": {
+    "command": "npx",
+    "args": ["-y", "pushover-mcp@latest", "start", "--token", "${PUSHOVER_APP_TOKEN}", "--user", "${PUSHOVER_USER_KEY}"]
+  }
+}
