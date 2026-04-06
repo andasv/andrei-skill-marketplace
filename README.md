@@ -7,6 +7,8 @@ A [Claude Code](https://claude.ai/claude-code) plugin marketplace.
 | Plugin | Description | Repo |
 |--------|-------------|------|
 | `elternportal` | Substitution plans & parent letters from Eltern-Portal | [andasv/elternportal-skill](https://github.com/andasv/elternportal-skill) |
+| `aws-ses-mailer-skill` | Send emails via Amazon SES with attachments, HTML, CC/BCC & dry-run | [andasv/aws-ses-mailer-skill](https://github.com/andasv/aws-ses-mailer-skill) |
+| `podcast-skill` | Generate a 2-person AI podcast from content using ElevenLabs voices | [andasv/podcast-skill](https://github.com/andasv/podcast-skill) |
 
 ## Installation
 

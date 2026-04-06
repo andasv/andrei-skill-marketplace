@@ -1,0 +1,22 @@
+{
+  "name": "aws-ses-mailer-skill",
+  "owner": {
+    "name": "Andrei Svirida",
+    "email": "andasv@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "aws-ses-mailer",
+      "source": "./aws-ses-mailer",
+      "description": "Send emails via AWS SES. Supports plain text, HTML, CC/BCC, reply-to, display name, file attachments, and dry-run mode.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "homepage": "https://github.com/andasv/aws-ses-mailer-skill",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": ["email", "aws", "ses", "mailer"]
+    }
+  ]
+}

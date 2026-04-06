@@ -1,0 +1,68 @@
+DISCLAIMER
+
+This software is provided "as is" without warranty of any kind, express or
+implied. Use at your own risk.
+
+By using this software, you acknowledge and agree to the following:
+
+1. NO LIABILITY
+   The authors and contributors of this software shall not be held liable for
+   any damages, losses, costs, or expenses arising from the use or inability
+   to use this software, including but not limited to direct, indirect,
+   incidental, special, exemplary, or consequential damages.
+
+2. AWS COSTS AND BILLING
+   This software interacts with Amazon Web Services (AWS) Simple Email Service
+   (SES). You are solely responsible for all AWS charges, fees, and costs
+   incurred through the use of this software. The authors are not responsible
+   for any unexpected or excessive AWS billing resulting from the use of this
+   software, including but not limited to email sending costs, data transfer
+   fees, and any overage charges.
+
+3. EMAIL COMPLIANCE AND ANTI-SPAM
+   You are solely responsible for ensuring that your use of this software
+   complies with all applicable laws and regulations, including but not
+   limited to:
+   - CAN-SPAM Act (United States)
+   - General Data Protection Regulation (GDPR) (European Union)
+   - Canada's Anti-Spam Legislation (CASL)
+   - Privacy and Electronic Communications Regulations (PECR) (United Kingdom)
+   - Any other local, national, or international anti-spam, privacy, or
+     electronic communications laws
+
+   The authors do not condone and shall not be held liable for any misuse of
+   this software for sending unsolicited, deceptive, or unlawful emails.
+
+4. NO GUARANTEE OF DELIVERY
+   This software does not guarantee email delivery. Email delivery depends on
+   many factors outside the control of this software, including but not limited
+   to AWS SES configuration, recipient mail server policies, spam filters, DNS
+   configuration, and sender reputation. The authors make no representations
+   or warranties regarding email deliverability.
+
+5. DATA HANDLING AND PRIVACY
+   You are solely responsible for the data you transmit using this software,
+   including any personally identifiable information (PII), protected health
+   information (PHI), financial data, or other sensitive information. The
+   authors are not responsible for data breaches, unauthorized access, or
+   mishandling of data sent through this software. It is your responsibility
+   to implement appropriate security measures and comply with all applicable
+   data protection regulations.
+
+6. AWS SES SANDBOX LIMITATIONS
+   AWS SES accounts start in sandbox mode with sending restrictions. You are
+   responsible for understanding and managing your SES account status,
+   including requesting production access when needed. The authors are not
+   responsible for any issues arising from sandbox limitations.
+
+7. THIRD-PARTY SERVICES
+   This software depends on third-party services (AWS) that may change their
+   terms of service, pricing, APIs, or availability at any time. The authors
+   are not responsible for any disruptions or changes to third-party services.
+
+8. NOT LEGAL ADVICE
+   This disclaimer and the accompanying license do not constitute legal
+   advice. If you have concerns about the legal implications of using this
+   software, consult a qualified legal professional.
+
+For the full license terms, see the LICENSE file included with this software.

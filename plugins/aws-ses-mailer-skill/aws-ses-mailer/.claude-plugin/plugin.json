@@ -1,0 +1,8 @@
+{
+  "name": "aws-ses-mailer",
+  "version": "0.1.0",
+  "description": "Send emails via AWS SES. Supports plain text, HTML, CC/BCC, reply-to, display name, file attachments, and dry-run mode.",
+  "author": {
+    "name": "Andrei Svirida"
+  }
+}
