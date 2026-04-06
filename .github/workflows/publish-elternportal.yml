@@ -1,0 +1,31 @@
+name: Publish elternportal-mcp to PyPI
+
+on:
+  push:
+    tags:
+      - 'elternportal-mcp-v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Build package
+        working-directory: plugins/elternportal
+        run: uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: plugins/elternportal/dist/
