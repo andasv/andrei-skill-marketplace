@@ -6,7 +6,7 @@ A plugin marketplace for [Claude Cowork](https://claude.ai/cowork). Install plug
 
 | Plugin | Description | MCP Server Required |
 |--------|-------------|---------------------|
-| `elternportal` | School data: substitutions, letters, bulletin board, calendar | [Eltern-Portal MCP](mcp/elternportal/) (included in this repo) |
+| `elternportal` | School data: substitutions, letters, bulletin board, calendar | Bundled (`.mcp.json` auto-configures) |
 | `aws-ses-mailer` | Send emails via AWS SES with HTML, attachments, CC/BCC & dry-run | [AWS API MCP](https://github.com/awslabs/mcp) (`awslabs.aws-api-mcp-server`) |
 | `podcast-skill` | Generate a 2-person AI podcast with ElevenLabs voice synthesis | [ElevenLabs MCP](https://github.com/elevenlabs/elevenlabs-mcp) |
 | `ai-espresso` | Strategic morning AI news briefing as a self-contained HTML file | [Exa MCP](https://github.com/exa-labs/exa-mcp-server) |
@@ -59,7 +59,7 @@ Access German school Eltern-Portal data via a dedicated MCP server. Tools:
 - **get_schwarzes_brett** — Bulletin board announcements
 - **get_termine** — School calendar events
 
-**Prerequisites:** [Eltern-Portal MCP Server](mcp/elternportal/) configured with school credentials and ANTHROPIC_API_KEY.
+**Prerequisites:** MCP server bundled in plugin (auto-configured via `.mcp.json`). Set `ELTERNPORTAL_URL`, `ELTERNPORTAL_USER`, `ELTERNPORTAL_PASSWORD`, and `ANTHROPIC_API_KEY` in the MCP server env.
 
 ### aws-ses-mailer
 
@@ -97,6 +97,11 @@ andrei-skill-marketplace/
 │   ├── elternportal/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json       # Plugin manifest
+│   │   ├── .mcp.json             # MCP server config (auto-discovered)
+│   │   ├── elternportal_mcp/     # MCP server (Python + FastMCP)
+│   │   │   ├── server.py
+│   │   │   ├── auth.py
+│   │   │   └── parsers/
 │   │   └── skills/
 │   │       └── elternportal/
 │   │           └── SKILL.md
@@ -124,14 +129,6 @@ andrei-skill-marketplace/
 │       │       └── SKILL.md
 │       ├── references/
 │       └── evals/
-├── mcp/
-│   └── elternportal/             # Eltern-Portal MCP server
-│       ├── elternportal_mcp/
-│       │   ├── server.py
-│       │   ├── auth.py
-│       │   └── parsers/
-│       ├── requirements.txt
-│       └── README.md
 └── README.md
 ```
 
