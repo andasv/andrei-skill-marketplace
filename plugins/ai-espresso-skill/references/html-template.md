@@ -221,7 +221,7 @@ The output must be a self-contained HTML file with all CSS inline (no external s
 
     <!-- SA picks section ALWAYS last, uses class="section sa-picks" -->
     <div class="section sa-picks">
-      <h2 class="section-title">Top 5 for Anthropic Solution Architect</h2>
+      <h2 class="section-title">Top 5 for Agentic AI Engineering Leader</h2>
 
       <div class="item">
         <h3><a href="{{ITEM_URL}}">{{ITEM_TITLE}}</a></h3>

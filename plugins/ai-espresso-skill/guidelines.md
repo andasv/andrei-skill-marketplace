@@ -90,20 +90,20 @@ German-specific AI developments relevant to enterprise deployment:
 This section should always include at least one item when relevant news exists.
 On quiet days it may be omitted.
 
-### 7. Top 5 for Anthropic Solution Architect (REQUIRED, always last)
+### 7. Top 5 for Agentic AI Engineering Leader (REQUIRED, always last)
 
-Curated picks most relevant to an Anthropic Principal Solution Architect
-who works with Claude API and Claude Code daily. Uses a **72-hour lookback**
+Curated picks most relevant to an engineering leader building with agentic
+AI, LLM APIs, and coding agents daily. Uses a **72-hour lookback**
 window and draws from ALL sources (primary + Perplexity).
 
 **Relevance filter** — include news that directly affects:
-- Claude API usage patterns, pricing, limits, or capabilities
-- Claude Code features, updates, or competitive positioning
-- Competitor API/SDK changes (OpenAI API, Gemini API, open-weight model APIs)
-- Developer tooling, IDE integrations, coding agents, and agentic workflows
-- Enterprise deployment patterns, security, compliance for AI APIs
-- Customer objections, competitive losses, or win opportunities
+- LLM API changes, pricing, limits, or new capabilities
+- Coding agents, IDE integrations, and agentic workflow tooling
+- Competitor API/SDK changes (OpenAI API, Gemini API, Claude API, open-weight model APIs)
+- Developer tooling, frameworks, and infrastructure for AI applications
+- Enterprise deployment patterns, security, and compliance for AI APIs
 - Technical architecture decisions (RAG, function calling, long context, MCP)
+- Competitive landscape shifts relevant to AI engineering leaders
 
 **Deduplication** — Before including an item, check all existing HTML files
 in `./output/` from previous days. If a story was already covered in a prior
@@ -112,12 +112,12 @@ edition, do NOT include it again unless there is a material update.
 **Format** — Each item gets:
 - Title (linked)
 - Published date
-- 2-3 sentence summary explaining **why this matters to a Solutions Architect**
-  (not generic significance — specific to customer conversations, demos,
-  technical guidance, or competitive positioning)
+- 2-3 sentence summary explaining **why this matters to an agentic AI engineering leader**
+  (not generic significance — specific to technical decisions, team tooling,
+  competitive landscape, or deployment strategy)
 
 Exactly 5 items. If fewer than 5 qualify after dedup, include the best
-available and note "X of 5 — light period for SA-relevant news."
+available and note "X of 5 — light period for leadership-relevant news."
 
 ## Per-Item Analysis Format
 

@@ -100,13 +100,13 @@ Before selecting items, check for prior coverage to avoid repeating stories:
 1. Use `Glob` to find existing HTML files in `./output/` (pattern: `output/*.html`).
 2. For each file from the previous 3 days, use `Read` to scan for item titles.
 3. Build a list of previously covered story titles/topics.
-4. Mark any items in the working list that were already covered. These are excluded from the "Top 5 for Anthropic Solution Architect" section (unless there is a material update). They may still appear in other sections if they are from the last 24h.
+4. Mark any items in the working list that were already covered. These are excluded from the "Top 5 for Agentic AI Engineering Leader" section (unless there is a material update). They may still appear in other sections if they are from the last 24h.
 
 ---
 
 ## Phase 4: Prioritize, Filter, and Analyze
 
-### Selection (target: 5-8 items for main sections + 5 for SA section)
+### Selection (target: 5-8 items for main sections + 5 for leader picks section)
 
 Apply these rules in order:
 
@@ -124,26 +124,26 @@ For each selected item, write the analysis as defined in `guidelines.md`:
 - **Why it matters**: Strategic significance, competitive dynamics, market implications. 2-3 sentences.
 - **Implications for Anthropic**: Tactical and strategic implications to Anthropic's business. Neutral observations covering commercial, product, hiring, and regulatory positioning. 2-3 sentences. For the AI in Germany section, add extra depth referencing DACH market dynamics, data sovereignty, works councils, and local competitive landscape.
 
-### Top 5 for Anthropic Solution Architect
+### Top 5 for Agentic AI Engineering Leader
 
-After selecting the main section items, separately curate the SA section:
+After selecting the main section items, separately curate the leader picks section:
 
-1. From ALL collected items (primary sources + Perplexity, using a **72-hour lookback**), filter for SA relevance: Claude API/Code impact, competitor API changes, developer tooling, agentic workflows, enterprise deployment patterns, MCP/RAG/function calling, customer win/loss signals.
+1. From ALL collected items (primary sources + Perplexity, using a **72-hour lookback**), filter for leadership relevance: LLM API changes, developer tooling, agentic workflows, enterprise deployment patterns, MCP/RAG/function calling, coding agents, competitive positioning signals.
 2. Run one additional Perplexity query if needed: `mcp__perplexity__perplexity_ask` with query "What are the latest Claude API, Claude Code, OpenAI API, coding agent, and developer AI tooling news in the last 3 days?" with `search_recency_filter: "week"`.
 3. Exclude any story already covered in a previous day's `./output/` HTML file (from Phase 3.5 dedup), unless there is a material update.
-4. Select exactly 5 items. Each gets a 2-3 sentence summary explaining why it matters specifically to a Solutions Architect (customer conversations, demos, technical guidance, competitive positioning).
+4. Select exactly 5 items. Each gets a 2-3 sentence summary explaining why it matters to an agentic AI engineering leader (technical decisions, team tooling, competitive landscape, deployment strategy).
 5. Items in this section MAY also appear in the main sections above — this is the only section where duplication is allowed, since it serves a different analytical lens.
 
 ### Grouping
 
-Assign each item to exactly one main section (SA section is separate):
+Assign each item to exactly one main section (leader picks section is separate):
 1. News from Anthropic and OpenAI (factual listings only, no analysis — populated in Phase 2 from official newsrooms with 36h lookback)
 2. Frontier Labs Competition Update (excludes items already in section 1)
 3. Models & Research
 4. Products & Tools
 5. Industry & Business
 6. AI in Germany
-7. Top 5 for Anthropic Solution Architect (separate curation, 72h lookback, deduped against previous editions)
+7. Top 5 for Agentic AI Engineering Leader (separate curation, 72h lookback, deduped against previous editions)
 
 The "News from Anthropic and OpenAI" section always appears — show "N/A — No new announcements in the last 36 hours" if empty. The Frontier Labs section also always appears. Other sections with no items are omitted. The "AI in Germany" section should appear whenever relevant German AI news exists.
 
