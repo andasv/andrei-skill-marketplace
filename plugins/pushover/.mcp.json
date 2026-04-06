@@ -1,6 +1,11 @@
 {
   "pushover": {
-    "command": "npx",
-    "args": ["-y", "pushover-mcp@latest", "start", "--token", "${PUSHOVER_APP_TOKEN}", "--user", "${PUSHOVER_USER_KEY}"]
+    "command": "python",
+    "args": ["-m", "pushover_mcp"],
+    "cwd": "${CLAUDE_PLUGIN_ROOT}",
+    "env": {
+      "PUSHOVER_APP_TOKEN": "${PUSHOVER_APP_TOKEN}",
+      "PUSHOVER_USER_KEY": "${PUSHOVER_USER_KEY}"
+    }
   }
 }
