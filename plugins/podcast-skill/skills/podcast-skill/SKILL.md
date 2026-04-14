@@ -9,13 +9,14 @@ Generate a professional 2-person podcast from written content using configurable
 
 ## MCP Dependencies
 
-This skill requires the following MCP server to be configured:
+This skill uses the following MCP servers:
 
 | MCP Server | Purpose | Required Tools |
 |------------|---------|----------------|
 | **ElevenLabs** | Text-to-speech synthesis and audio playback | `mcp__ElevenLabs__text_to_speech`, `mcp__ElevenLabs__play_audio`, `mcp__ElevenLabs__search_voices` |
+| **Transistor** *(optional — only when the user explicitly requests publishing)* | Upload audio and manage episodes on Transistor.fm | `mcp__transistor__upload_audio`, `mcp__transistor__create_episode`, `mcp__transistor__update_episode`, `mcp__transistor__publish_episode`, `mcp__transistor__delete_episode`, `mcp__transistor__get_episode`, `mcp__transistor__list_episodes`, `mcp__transistor__get_show`, `mcp__transistor__update_show` |
 
-The ElevenLabs MCP server handles API authentication internally. No API keys need to be configured in the skill itself.
+The ElevenLabs MCP server handles API authentication internally. The Transistor MCP server reads `TRANSISTOR_API_KEY` and `TRANSISTOR_SHOW_ID` from the repo-root `.env`.
 
 ## Parameters
 
@@ -167,6 +168,84 @@ Execute these three phases sequentially. Do not skip phases.
    - Audio file path
    - Number of segments
    - Approximate duration
+
+---
+
+## Publishing to Transistor.fm (opt-in, explicit command only)
+
+**Do NOT publish automatically.** Phase 3 ends with a local MP3. Publishing to Transistor.fm only happens when the user explicitly asks in that same turn — phrases like "publish it", "upload to transistor", "post this episode", "push to the podcast feed". Producing audio never implies publishing. If the user's command is ambiguous (e.g. "share this"), ask before calling any Transistor write tool.
+
+### Tools provided by the Transistor MCP
+
+- `mcp__transistor__upload_audio(local_path)` — 2-step flow: authorizes an S3 upload URL, PUTs the file, returns `{ audio_url, content_type, filename, size_bytes }`. Pass `audio_url` into the next step.
+- `mcp__transistor__create_episode(title, summary?, description?, audio_url?, image_url?, season?, number?, type?, keywords?, author?, explicit?, show_id?)` — creates a **draft** episode. `type` is one of `full` / `trailer` / `bonus` (default `full`).
+- `mcp__transistor__update_episode(episode_id, ...)` — PATCH any subset of metadata fields.
+- `mcp__transistor__publish_episode(episode_id, status, scheduled_for?)` — `status` is `published`, `scheduled`, or `draft`. `scheduled_for` is an ISO 8601 datetime, required when `status="scheduled"`.
+- `mcp__transistor__delete_episode(episode_id)` — **unpublishes** the episode (sets `status=draft`). Transistor's public API has no hard delete; permanent removal is dashboard-only.
+- `mcp__transistor__get_episode` / `mcp__transistor__list_episodes` — read-only inspection.
+- `mcp__transistor__get_show` / `mcp__transistor__list_shows` / `mcp__transistor__update_show` — show metadata. Transistor does **not** allow creating or deleting shows via API.
+
+Every `show_id` argument defaults to `TRANSISTOR_SHOW_ID` from the env, so single-podcast workflows can omit it.
+
+### Canonical publish flow
+
+When the user has explicitly asked to publish, execute these steps in order:
+
+1. **Upload the merged mp3**
+   ```
+   mcp__transistor__upload_audio(local_path="{output_dir}/{date}-podcast.mp3")
+   → { audio_url: "https://...", ... }
+   ```
+   Capture `audio_url` from the response.
+
+2. **Build episode metadata from the transcript**
+   - `title`: Derive from the transcript YAML frontmatter `topic` field, or ask the user if unclear.
+   - `summary`: 1–2 sentence plain-text hook (≤ 200 chars). Use the topic headline.
+   - `description`: Full show notes as basic HTML. Include: the discussion beats, source links from the original input (AI Espresso news items), persona names. Plain `<p>`, `<ul>`, `<li>`, `<a href>` tags are safe.
+   - `season` / `number`: Ask the user or look up the next number with `list_episodes(status="published", per=1)`.
+   - `type`: `full` unless the user says trailer/bonus.
+   - `keywords`: Comma-separated, drawn from the topic.
+   - `image_url`: Only if the user provides cover art; otherwise omit and Transistor falls back to show artwork.
+   - `explicit`: `false` unless the user says otherwise.
+
+3. **Create the draft episode**
+   ```
+   mcp__transistor__create_episode(
+     title=...,
+     summary=...,
+     description=...,
+     audio_url="<from step 1>",
+     season=..., number=..., type="full",
+     keywords=...,
+   )
+   → { data: { id: "<episode_id>", ... } }
+   ```
+   Save the returned `data.id` — it's needed for every subsequent call.
+
+4. **(Optional) Refine metadata**
+   If the user wants to tweak anything after creation, use `update_episode(episode_id, ...)`. Only send the fields that change.
+
+5. **Publish or schedule** (only on explicit user command — do not auto-publish a draft)
+   - Immediate: `publish_episode(episode_id, status="published")`
+   - Scheduled: `publish_episode(episode_id, status="scheduled", scheduled_for="2026-05-01T09:00:00Z")` (ISO 8601, UTC recommended)
+   - Keep as draft: do nothing; the episode stays private until explicitly published.
+
+6. **Report back** to the user with:
+   - The Transistor dashboard URL for the episode (derivable from show slug + episode id, or use the `share_url` attribute from the response).
+   - Its current status (`draft` / `scheduled` / `published`).
+   - The public `media_url` / `audio_url` if published.
+
+### Nuances and gotchas
+
+- **Rate limit**: Transistor enforces 10 requests per 10 seconds. The MCP client retries 429s with 1s/2s/4s backoff (max 3 retries). Don't fire bursts of calls.
+- **Draft-first is mandatory**: `create_episode` always produces a draft. Publishing is a separate `publish_episode` call. This gives the user a chance to review in the Transistor dashboard before the episode goes live on feeds.
+- **"Delete" semantics**: `delete_episode` is actually an unpublish. The episode remains in the Transistor dashboard. To permanently delete, direct the user to the Transistor.fm dashboard UI.
+- **Artwork size**: Per-episode `image_url` should be a square PNG/JPG at least 1400×1400 and no more than 3000×3000, RGB, under 512 KB. Transistor will reject images outside that range.
+- **Summary vs description**: Summary is plain text shown in directory listings; description is the full show notes and supports limited HTML. Keep summary short and punchy; put all detail in description.
+- **Season and episode numbers** are required by some podcast directories (Apple Podcasts flags missing numbers). Always set them. If unsure of the next number, call `list_episodes(status="published", per=1)` and increment.
+- **Scheduled publishing** uses the show's configured time zone (see `get_show()`), but `scheduled_for` should be sent as ISO 8601 with an explicit timezone offset (e.g. `Z` for UTC). Confirm the resulting local-time publish moment with the user before scheduling.
+- **Creating or deleting podcasts** is not possible via API — it must be done through the Transistor dashboard at https://dashboard.transistor.fm.
+- **Environment**: If the user hasn't set `TRANSISTOR_API_KEY` and `TRANSISTOR_SHOW_ID` in `.env`, the first tool call will fail with a clear RuntimeError. Direct them to the plugin README.
 
 ---
 

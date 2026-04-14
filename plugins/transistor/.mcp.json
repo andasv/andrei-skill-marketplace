@@ -1,0 +1,11 @@
+{
+  "transistor": {
+    "command": "python",
+    "args": ["-m", "transistor_mcp"],
+    "cwd": "${CLAUDE_PLUGIN_ROOT}",
+    "env": {
+      "TRANSISTOR_API_KEY": "${TRANSISTOR_API_KEY}",
+      "TRANSISTOR_SHOW_ID": "${TRANSISTOR_SHOW_ID}"
+    }
+  }
+}

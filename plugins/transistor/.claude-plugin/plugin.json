@@ -1,0 +1,11 @@
+{
+  "name": "transistor",
+  "version": "1.0.0",
+  "description": "Publish and manage podcast episodes on Transistor.fm. Upload audio, create/update/list/get episodes, publish or schedule, update show metadata, and fetch analytics.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["transistor", "podcast", "publishing", "rss", "audio", "mcp"]
+}

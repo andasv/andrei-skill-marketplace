@@ -64,6 +64,18 @@
       "repository": "https://github.com/andasv/andrei-skill-marketplace",
       "license": "MIT",
       "keywords": ["pushover", "notification", "alert", "urgent", "push"]
+    },
+    {
+      "name": "transistor",
+      "source": "./plugins/transistor",
+      "description": "Publish and manage podcast episodes on Transistor.fm. Upload audio, create/update/list/get episodes, publish or schedule, update show metadata, and fetch analytics.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/andrei-skill-marketplace",
+      "license": "MIT",
+      "keywords": ["transistor", "podcast", "publishing", "rss", "audio", "mcp"]
     }
   ]
 }
