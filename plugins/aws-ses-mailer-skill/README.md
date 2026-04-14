@@ -1,8 +1,15 @@
 # aws-ses-mailer
 
-Send emails via Amazon SES from AI coding agents. Works with **Claude Cowork** and any agentic assistant that supports MCP.
+Send emails via Amazon SES from AI coding agents. Works with **Claude Code** and any agentic assistant that supports MCP.
 
 Uses the official [AWS API MCP Server](https://github.com/awslabs/mcp) (`awslabs.aws-api-mcp-server`) to execute AWS CLI commands — no custom scripts or local credentials management needed.
+
+## Install
+
+```
+/plugin marketplace update andrei-skill-marketplace
+/plugin install aws-ses-mailer@andrei-skill-marketplace
+```
 
 ## Features
 
@@ -66,6 +73,11 @@ Once installed, the skill is auto-discovered. Ask Claude to send an email:
 > "Email the report to bob@example.com with CC to manager@example.com"
 
 > "Do a dry run of sending a newsletter to the team"
+
+## Cross-skill integration
+
+- **[ai-espresso](../ai-espresso-skill/)** — mail the morning briefing: `Email today's AI espresso to the team.`
+- **[pushover](../pushover/)** — get a push notification when delivery fails or a dry-run completes.
 
 ## License
 
