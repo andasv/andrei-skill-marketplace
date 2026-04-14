@@ -9,11 +9,12 @@ Generate a professional 2-person AI podcast from written content using configura
 - Multiple podcast styles: collaborative, debate, interview
 - Adjustable duration and topic count
 - Automatic audio merging into a single MP3
+- Optional ID3 chapter markers (one per feature/topic)
 - Auto-play on completion
 
 ## Prerequisites
 
-- [Python 3](https://www.python.org/) with `pydub` (`pip install pydub`)
+- [Python 3](https://www.python.org/) with `pydub` and `mutagen` (`pip install -r scripts/requirements.txt`)
 - [ffmpeg](https://ffmpeg.org/) installed and on PATH
 - An [ElevenLabs](https://elevenlabs.io/) account with API access (via MCP server)
 
@@ -48,6 +49,37 @@ Default personas are in `personas/defaults/`. Each persona is a markdown file wi
 
 To use custom personas, create your own directory with persona files and pass it via the `personas_dir` parameter.
 
+## Chapters (optional)
+
+Drop a `<date>-chapters.json` file next to the transcript in your `output_dir` and the skill will embed ID3 `CTOC` + `CHAP` frames into the final MP3. Apple Podcasts, Overcast, Pocket Casts, Spotify, VLC, and Transistor's web player all honor these for clickable jump-to-chapter navigation.
+
+JSON schema:
+
+```json
+{
+  "chapters": [
+    {"title": "Intro and headline feature", "start_turn": 1},
+    {"title": "/recap command", "start_turn": 8},
+    {"title": "Better error messages", "start_turn": 19}
+  ]
+}
+```
+
+- `start_turn` is 1-indexed and refers to the zero-padded segment files produced during audio production (`001_alex.mp3`, `002_sarah.mp3`, …).
+- Chapter 1 must start at `start_turn=1`; `start_turn` values must be strictly increasing; ≥ 2 chapters required.
+- Chapter start times are computed from cumulative segment durations, so they align exactly with the merged MP3 regardless of TTS timing.
+- The script is idempotent — running it again overwrites any prior chapter frames.
+- If the file is absent (default for AI Espresso briefings), chapter embedding is skipped silently.
+
+You can also invoke the embedder directly:
+
+```bash
+python scripts/add_chapters.py \
+  --segments-dir output/2026-04-14-segments \
+  --output output/2026-04-14-podcast.mp3 \
+  --chapters-json output/2026-04-14-chapters.json
+```
+
 ## Project Structure
 
 ```
@@ -63,6 +95,7 @@ podcast-skill/
 │   └── transcript-template.md
 ├── scripts/
 │   ├── merge_audio.py        # Merges audio segments into final MP3
+│   ├── add_chapters.py       # Optional: embed ID3 chapter markers
 │   └── requirements.txt
 └── output/                   # Generated transcripts and audio
 ```

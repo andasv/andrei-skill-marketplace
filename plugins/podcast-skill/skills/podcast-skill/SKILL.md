@@ -161,13 +161,23 @@ Execute these three phases sequentially. Do not skip phases.
      --output {output_dir}/{date}-podcast.mp3
    ```
 
-7. **Auto-play the podcast**: Call `mcp__ElevenLabs__play_audio` with the merged file path.
+7. **Embed chapter markers (optional, opt-in)**: If `{output_dir}/{date}-chapters.json` exists, run:
+   ```bash
+   python {skill_dir}/scripts/add_chapters.py \
+     --segments-dir {output_dir}/{date}-segments \
+     --output {output_dir}/{date}-podcast.mp3 \
+     --chapters-json {output_dir}/{date}-chapters.json
+   ```
+   The script writes ID3 `CTOC` + `CHAP` frames in place and is idempotent. If the chapters file is absent (the default for AI-Espresso-style single-topic podcasts), skip this step silently. See the README's "Chapters" section for the JSON schema.
 
-8. **Report results** to the user:
+8. **Auto-play the podcast**: Call `mcp__ElevenLabs__play_audio` with the merged file path.
+
+9. **Report results** to the user:
    - Transcript path
    - Audio file path
    - Number of segments
    - Approximate duration
+   - Chapter count (if chapters.json was present)
 
 ---
 
