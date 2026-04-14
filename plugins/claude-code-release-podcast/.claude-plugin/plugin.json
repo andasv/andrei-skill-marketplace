@@ -1,0 +1,11 @@
+{
+  "name": "claude-code-release-podcast",
+  "version": "1.0.0",
+  "description": "Generate and publish a concise podcast episode for every Claude Code release. Fetches the CHANGELOG, researches each feature (WHY/WHAT/HOW), chains podcast-skill for audio production, and publishes to Transistor.fm. Tracks processed releases in TRACKER.md to prevent duplicates.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["claude-code", "release-notes", "podcast", "changelog", "transistor"]
+}

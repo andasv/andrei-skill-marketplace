@@ -76,6 +76,18 @@
       "repository": "https://github.com/andasv/andrei-skill-marketplace",
       "license": "MIT",
       "keywords": ["transistor", "podcast", "publishing", "rss", "audio", "mcp"]
+    },
+    {
+      "name": "claude-code-release-podcast",
+      "source": "./plugins/claude-code-release-podcast",
+      "description": "Generate and publish a podcast episode for every Claude Code release. Fetches the CHANGELOG, researches each feature (WHY/WHAT/HOW), chains podcast-skill for audio, and publishes to Transistor.fm. Tracks processed releases in TRACKER.md.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/andrei-skill-marketplace",
+      "license": "MIT",
+      "keywords": ["claude-code", "release-notes", "podcast", "changelog", "transistor"]
     }
   ]
 }
