@@ -121,6 +121,10 @@ Supports default (newest unprocessed), `version=X.Y.Z`, `since=…/until=…` ra
 
 **Prerequisites:** `podcast-skill` and `transistor` plugins installed, ElevenLabs MCP configured.
 
+## Show Registry
+
+Transistor show ids and per-show configuration live in [`SHOWS.md`](./SHOWS.md). Skills that publish via the [`transistor`](./plugins/transistor/) MCP read their show id from there rather than from `.env`. To add a new show: create it in the [Transistor dashboard](https://dashboard.transistor.fm/), then append an entry to `SHOWS.md` (see the file's "Adding a new show" section).
+
 ## Repository Structure
 
 ```

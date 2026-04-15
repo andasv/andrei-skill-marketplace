@@ -48,13 +48,15 @@ CHANGELOG.md  →  research per bullet  →  brief.md  →  podcast-skill  →  
 
 Hard-coded values for this skill — not secrets, no need to live in `.env`. Reference these constants by name in the steps below; pass them explicitly to the Transistor tools (do **not** rely on the MCP server's env-var fallback, which may be unset for this consumer).
 
-| Constant | Value |
-|---|---|
-| `SHOW_ID` | `ai-coding-assistant-release-notes-podcast` |
-| `SEASON` | `1` |
-| `EPISODE_TYPE` | `full` |
-| `CHANGELOG_URL` | `https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md` |
-| `DOCS_BASE` | `https://code.claude.com/docs/en` |
+| Constant | Value | Source |
+|---|---|---|
+| `SHOW_ID` | `ai-coding-assistant-release-notes-podcast` | [`/SHOWS.md` → `claude-code-release-podcast` entry](../../../../SHOWS.md) (slug field) |
+| `SEASON` | `1` | inline |
+| `EPISODE_TYPE` | `full` | inline |
+| `CHANGELOG_URL` | `https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md` | inline |
+| `DOCS_BASE` | `https://code.claude.com/docs/en` | inline |
+
+`SHOW_ID` lives in [`/SHOWS.md`](../../../../SHOWS.md) at the repo root (the central registry for every Transistor show this marketplace publishes to). The value above is reproduced inline so the skill stays self-contained when invoked, but treat `/SHOWS.md` as the source of truth — if the show is renamed in the dashboard, update SHOWS.md first, then this skill.
 
 ## Execution Pipeline
 
