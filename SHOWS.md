@@ -50,13 +50,13 @@ Each entry must include:
 | `title` | Daily AI Espresso |
 | `feed_url` | https://feeds.transistor.fm/daily-ai-espresso |
 | `dashboard_url` | https://dashboard.transistor.fm/shows/daily-ai-espresso |
-| `consumer_skill` | *(no skill yet — feeds from [`plugins/ai-espresso-skill`](./plugins/ai-espresso-skill) HTML output, podcast generator pending)* |
+| `consumer_skill` | [`plugins/daily-ai-espresso-podcast`](./plugins/daily-ai-espresso-podcast) (consumes HTML produced by [`plugins/ai-espresso-skill`](./plugins/ai-espresso-skill)) |
 | `default_personas` | `plugins/podcast-skill/personas/defaults/` (Alex Chen + Sarah Kim) |
 | `default_style` | `collaborative` |
 | `category` | Technology |
 | `language` | en |
 | `time_zone` | Berlin |
-| `notes` | One episode per day. Source: the AI Espresso morning briefing HTML in `./output/YYYY-MM-DD.html`. Target ~5 minutes. |
+| `notes` | One episode per day. Source: the AI Espresso morning briefing HTML in `./output/YYYY-MM-DD.html`. Target ~15 minutes covering 5–7 stories with one ID3 chapter per covered story. |
 
 ## Adding a new show
 

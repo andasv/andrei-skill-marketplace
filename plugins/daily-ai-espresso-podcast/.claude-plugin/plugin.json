@@ -1,0 +1,11 @@
+{
+  "name": "daily-ai-espresso-podcast",
+  "version": "1.0.0",
+  "description": "Turn the daily AI Espresso morning briefing into a published 15-minute podcast episode. Reads the latest AI Espresso HTML from ./output/, chains podcast-skill to generate the audio with per-story chapter markers, and publishes to the 'Daily AI Espresso' show on Transistor.fm. Tracks processed days in AI_ESPRESSO_TRACKER.md.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["ai-espresso", "podcast", "daily", "ai-news", "transistor"]
+}

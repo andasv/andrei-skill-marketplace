@@ -13,6 +13,7 @@ A plugin marketplace for [Claude Cowork](https://claude.ai/cowork). Install plug
 | [`pushover`](./plugins/pushover/) | Urgent push notifications to your phone via Pushover | Bundled (Python + FastMCP) |
 | [`transistor`](./plugins/transistor/) | Publish and manage podcast episodes on Transistor.fm (upload, create, publish, analytics) | Bundled (Python + FastMCP) |
 | [`claude-code-release-podcast`](./plugins/claude-code-release-podcast/) | Auto-generate and publish a podcast episode for every Claude Code release, with ID3 chapter markers per feature | Chains `podcast-skill` + `transistor` |
+| [`daily-ai-espresso-podcast`](./plugins/daily-ai-espresso-podcast/) | Turn the daily AI Espresso morning briefing into a published 15-minute podcast episode, with ID3 chapter markers per covered story | Chains `ai-espresso` + `podcast-skill` + `transistor` |
 
 ## Installation
 
@@ -32,6 +33,7 @@ A plugin marketplace for [Claude Cowork](https://claude.ai/cowork). Install plug
 /plugin install pushover@andrei-skill-marketplace
 /plugin install transistor@andrei-skill-marketplace
 /plugin install claude-code-release-podcast@andrei-skill-marketplace
+/plugin install daily-ai-espresso-podcast@andrei-skill-marketplace
 ```
 
 ### 3. Use the skills
@@ -44,6 +46,7 @@ Once installed, skills are auto-discovered. Ask naturally:
 > "Give me an AI espresso for this morning"
 > "Send me a push notification about the deployment status"
 > "Publish a podcast for the latest Claude Code release"
+> "Publish today's AI espresso podcast"
 
 ## Plugin Details
 
@@ -120,6 +123,21 @@ Auto-generate and publish a podcast episode for every Claude Code release. Orche
 Supports default (newest unprocessed), `version=X.Y.Z`, `since=…/until=…` range backfill, and `dry_run=true` modes. Range/backfill gates on an explicit `yes, publish all N` confirmation.
 
 **Prerequisites:** `podcast-skill` and `transistor` plugins installed, ElevenLabs MCP configured.
+
+### daily-ai-espresso-podcast
+
+Turn the [`ai-espresso`](#ai-espresso) morning briefing into a published 15-minute podcast on the **Daily AI Espresso** Transistor show. Orchestrator that:
+
+1. Finds the latest `./output/YYYY-MM-DD.html` produced by `ai-espresso`.
+2. Picks the top 6 stories using a priority order (Frontier Labs > Anthropic/OpenAI official > Models & Research > Products & Tools > Industry & Business) per the skill's `references/coverage-guide.md`.
+3. Chains [`podcast-skill`](./plugins/podcast-skill/) for transcript + ~2,250-word audio with Alex Chen + Sarah Kim.
+4. Embeds **ID3 chapter markers — one per covered story** — for jump-to-topic listening.
+5. Uploads + publishes via the [`transistor`](./plugins/transistor/) MCP to show id `77097` (configured in [`SHOWS.md`](./SHOWS.md)).
+6. Tracks processed days in `./output/AI_ESPRESSO_TRACKER.md` to prevent duplicates.
+
+Supports default (newest unprocessed), `date=YYYY-MM-DD`, `since=…/until=…` range backfill, and `dry_run=true` modes. Range/backfill gates on an explicit `yes, publish all N` confirmation.
+
+**Prerequisites:** `ai-espresso`, `podcast-skill`, and `transistor` plugins installed, ElevenLabs MCP configured.
 
 ## Show Registry
 

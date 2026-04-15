@@ -88,6 +88,18 @@
       "repository": "https://github.com/andasv/andrei-skill-marketplace",
       "license": "MIT",
       "keywords": ["claude-code", "release-notes", "podcast", "changelog", "transistor"]
+    },
+    {
+      "name": "daily-ai-espresso-podcast",
+      "source": "./plugins/daily-ai-espresso-podcast",
+      "description": "Turn the daily AI Espresso morning briefing into a published 15-minute podcast episode. Reads the latest AI Espresso HTML, chains podcast-skill for audio with per-story chapter markers, and publishes to the Daily AI Espresso show on Transistor.fm.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Andrei Svirida"
+      },
+      "repository": "https://github.com/andasv/andrei-skill-marketplace",
+      "license": "MIT",
+      "keywords": ["ai-espresso", "podcast", "daily", "ai-news", "transistor"]
     }
   ]
 }
