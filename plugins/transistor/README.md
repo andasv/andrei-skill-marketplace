@@ -9,7 +9,7 @@ Publish and manage podcast episodes on [Transistor.fm](https://transistor.fm/) f
 - Show metadata management (update, list, fetch)
 - Analytics: show-level, per-episode, and per-show episode rollups
 - Exponential backoff on Transistor's 10-req/10s rate limit (1s / 2s / 4s, max 3 retries)
-- Single-show workflows: tools accept an optional `show_id`, defaulting to `TRANSISTOR_SHOW_ID`
+- Tools accept `show_id` explicitly per call (recommended). For single-show workflows you can also set `TRANSISTOR_SHOW_ID` in `.env` as a fallback default.
 
 ## Prerequisites
 
@@ -17,11 +17,15 @@ Publish and manage podcast episodes on [Transistor.fm](https://transistor.fm/) f
 - A [Transistor.fm](https://dashboard.transistor.fm/) account and existing show (show creation is not possible via the API)
 - API key from **Account → API** in the Transistor dashboard
 - Python 3 with `fastmcp` and `requests` (`pip install fastmcp requests`)
-- Environment variables in the repo-root `.env`:
+- Environment variable in the repo-root `.env`:
   ```
   TRANSISTOR_API_KEY=<your_api_key>
+  ```
+- Optional fallback default for single-show workflows (not a secret — usually configured per-consumer in the calling skill instead):
+  ```
   TRANSISTOR_SHOW_ID=<numeric_id_or_slug>
   ```
+  Tools that accept `show_id` will honor this env var when the argument is omitted.
 
 ## Install
 

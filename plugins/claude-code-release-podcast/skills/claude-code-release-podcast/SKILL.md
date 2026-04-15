@@ -44,6 +44,18 @@ CHANGELOG.md  →  research per bullet  →  brief.md  →  podcast-skill  →  
 
 **Mode precedence**: `version` > `since`/`until` > default (newest unprocessed).
 
+## Configuration
+
+Hard-coded values for this skill — not secrets, no need to live in `.env`. Reference these constants by name in the steps below; pass them explicitly to the Transistor tools (do **not** rely on the MCP server's env-var fallback, which may be unset for this consumer).
+
+| Constant | Value |
+|---|---|
+| `SHOW_ID` | `ai-coding-assistant-release-notes-podcast` |
+| `SEASON` | `1` |
+| `EPISODE_TYPE` | `full` |
+| `CHANGELOG_URL` | `https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md` |
+| `DOCS_BASE` | `https://code.claude.com/docs/en` |
+
 ## Execution Pipeline
 
 Execute phases sequentially. Do not skip phases. Serialize per-version processing (no parallel publishes — Transistor rate limit is 10 req / 10 s).
@@ -248,9 +260,9 @@ Skipped entirely when `dry_run=true`.
    → { audio_url, content_type, filename, size_bytes }
    ```
 
-2. **Determine next episode number**:
+2. **Determine next episode number** (pass `SHOW_ID` explicitly):
    ```
-   mcp__transistor__list_episodes(status="published", per=1)
+   mcp__transistor__list_episodes(show_id="ai-coding-assistant-release-notes-podcast", status="published", per=1)
    ```
    Take the first episode's `attributes.number`, add 1. If the show has no published episodes yet, start at 1.
 
@@ -263,9 +275,10 @@ Skipped entirely when `dry_run=true`.
    - `type`: `"full"`.
    - `keywords`: `"claude code, release notes, {top_1}, {top_2}"` — derive `top_1` and `top_2` from the most prominent features (slash command names, env var names, etc.).
 
-4. **Create the episode (draft)**:
+4. **Create the episode (draft)** — pass `SHOW_ID` explicitly:
    ```
    mcp__transistor__create_episode(
+     show_id="ai-coding-assistant-release-notes-podcast",
      title=…, summary=…, description=…,
      audio_url=<from step 1>,
      season=1, number=<from step 2>, type="full",
