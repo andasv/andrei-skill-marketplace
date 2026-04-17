@@ -4,5 +4,9 @@ __pycache__/
 .DS_Store
 .claude/
 .playwright-mcp/
-# Intermediate per-turn TTS segments — regenerable from the transcript.
-output/*-segments/
+# Entire output/ is now excluded — transcripts, briefs, chapters, segments, mp3
+# All podcast artifacts live on Transistor.fm; the repo keeps the pipeline, not the results.
+output/
+# Managed Agents API runner state
+plugins/claude-code-release-podcast/managed-agent/.ids.json
+plugins/claude-code-release-podcast/managed-agent/.venv/
