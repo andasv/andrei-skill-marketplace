@@ -1,0 +1,6 @@
+# Fish Audio MCP plugin runtime dependencies.
+# Pinned ranges — not exact versions — so security patches land without
+# requiring a plugin release, while the major-version floor blocks
+# breaking-change upgrades that would need code adjustments here.
+fastmcp>=3.2,<4
+requests>=2.32.3,<3

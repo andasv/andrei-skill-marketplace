@@ -7,6 +7,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from .client import (
+    MAX_TEXT_LENGTH,
     VALID_FORMATS,
     VALID_MODELS,
     get_credit_info,
@@ -77,6 +78,13 @@ def text_to_speech(
         raise ValueError(f"model must be one of {sorted(VALID_MODELS)}")
     if audio_format not in VALID_FORMATS:
         raise ValueError(f"audio_format must be one of {sorted(VALID_FORMATS)}")
+    if not isinstance(text, str):
+        raise ValueError("text must be a string")
+    if len(text) > MAX_TEXT_LENGTH:
+        raise ValueError(
+            f"text exceeds the {MAX_TEXT_LENGTH}-char MCP boundary cap "
+            f"(got {len(text)}). Split into smaller calls."
+        )
 
     audio_bytes = synthesize_speech(
         text=text,

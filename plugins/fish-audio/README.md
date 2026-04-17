@@ -46,10 +46,10 @@ The API key lives in the MCP server config (`~/.claude.json` local scope) — **
 ### 1. Install dependencies
 
 ```bash
-pip install fastmcp requests
+pip install -r plugins/fish-audio/requirements.txt
 ```
 
-(Same runtime dependencies as the existing `transistor` plugin — if you've already set up that plugin you're done.)
+(Installs pinned `fastmcp>=3.2,<4` and `requests>=2.32.3,<3`. Same runtime dependencies as the existing `transistor` plugin — if you've already set up that plugin, these are likely already on your PATH.)
 
 ### 2. Register the MCP server with the key embedded (one time, local scope)
 
