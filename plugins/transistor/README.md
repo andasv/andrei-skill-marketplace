@@ -9,7 +9,7 @@ Publish and manage podcast episodes on [Transistor.fm](https://transistor.fm/) f
 - Show metadata management (update, list, fetch)
 - Analytics: show-level, per-episode, and per-show episode rollups
 - Exponential backoff on Transistor's 10-req/10s rate limit (1s / 2s / 4s, max 3 retries)
-- Tools accept `show_id` explicitly per call (recommended). For single-show workflows you can also set `TRANSISTOR_SHOW_ID` in `.env` as a fallback default.
+- Tools accept `show_id` explicitly per call (recommended). For single-show workflows the skill that invokes this plugin typically passes `show_id` directly; a fallback `TRANSISTOR_SHOW_ID` env var can also be injected via the MCP server config (see Setup below).
 
 ## Prerequisites
 
@@ -17,24 +17,39 @@ Publish and manage podcast episodes on [Transistor.fm](https://transistor.fm/) f
 - A [Transistor.fm](https://dashboard.transistor.fm/) account and existing show (show creation is not possible via the API)
 - API key from **Account → API** in the Transistor dashboard
 - Python 3 with `fastmcp` and `requests` (`pip install fastmcp requests`)
-- Environment variable in the repo-root `.env`:
-  ```
-  TRANSISTOR_API_KEY=<your_api_key>
-  ```
-- Optional fallback default for single-show workflows (not a secret — usually configured per-consumer in the calling skill instead):
-  ```
-  TRANSISTOR_SHOW_ID=<numeric_id_or_slug>
-  ```
-  Tools that accept `show_id` will honor this env var when the argument is omitted.
 
-## Install
+## Setup
 
-```
+The API key lives in the MCP server config (`~/.claude.json` local scope) — **not** in `.env`. Registration with `claude mcp add --env KEY=value` embeds the key directly in the MCP entry, which is scoped to this project and never committed to git.
+
+```bash
 /plugin marketplace update andrei-skill-marketplace
 /plugin install transistor@andrei-skill-marketplace
 ```
 
-The MCP server launches automatically via `.mcp.json` once the plugin is enabled and Claude Code is restarted.
+Then register the MCP server with the key embedded (one time, local scope):
+
+```bash
+cd plugins/transistor
+claude mcp add transistor \
+  --scope local \
+  --transport stdio \
+  --env TRANSISTOR_API_KEY=<your_api_key> \
+  -- python -m transistor_mcp
+```
+
+For single-show workflows you can also embed the default show id:
+
+```bash
+claude mcp add transistor \
+  --scope local \
+  --transport stdio \
+  --env TRANSISTOR_API_KEY=<your_api_key> \
+  --env TRANSISTOR_SHOW_ID=<numeric_id_or_slug> \
+  -- python -m transistor_mcp
+```
+
+Tools that accept `show_id` will honor this env var when the argument is omitted. Confirm with `claude mcp list` — you should see `transistor: ✓ Connected`. To rotate the key, `claude mcp remove transistor -s local` then re-run with the new value.
 
 ## Tools
 

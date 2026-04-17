@@ -1,13 +1,24 @@
 ---
 name: Alex Chen
 role: Senior AI Engineer
+# ElevenLabs settings (used when tts_provider=elevenlabs — default)
 voice_id: "bIHbv24MWmeRgasZH58o"
 voice_name: "Will"
 model_id: "eleven_multilingual_v2"
 stability: 0.45
 similarity_boost: 0.78
 style: 0.35
-speed: 1.05
+speed: 0.95
+# Fish Audio S1 settings (used when tts_provider=fish-audio)
+# Populate fish_audio_voice_id with a reference_id from `mcp__fish-audio__list_voices`.
+fish_audio_voice_id: "b86c46f504b54aec91cb489b05f3cb45"  # Arthur - Energetic American Male Narrator
+fish_audio_speed: 1.0
+# S2-Pro accepts free-form bracket-syntax tags; we use [calm] as the baseline
+# and [professional] as the steady-delivery variant. "Confident" intentionally
+# dropped per user direction — Alex should read measured and technical, not assertive.
+fish_audio_emotion_palette:
+  - calm
+  - professional
 ---
 
 # Alex Chen — Senior AI Engineer

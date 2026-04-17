@@ -1,7 +1,7 @@
 {
-  "transistor": {
+  "fish-audio": {
     "command": "python",
-    "args": ["-m", "transistor_mcp"],
+    "args": ["-m", "fish_audio_mcp"],
     "cwd": "${CLAUDE_PLUGIN_ROOT}"
   }
 }

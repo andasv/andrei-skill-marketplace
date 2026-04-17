@@ -256,6 +256,20 @@ Chapter frames survive Transistor's audio re-processing (verified against episod
 
 Skipped entirely when `dry_run=true`.
 
+0. **Duplicate guard (defense in depth)**. Before uploading anything, query Transistor for an existing episode with this version:
+   ```
+   mcp__transistor__list_episodes(
+     show_id="ai-coding-assistant-release-notes-podcast",
+     query="Claude Code v{version}",
+     per=10
+   )
+   ```
+   If any returned episode's `attributes.title` contains the literal substring `v{version}` (e.g. `v2.1.108`), abort this version's publish path:
+   - Append a TRACKER row with `Status=already-published` and the existing episode's `id` + `share_url`.
+   - Skip steps 1–5 below; proceed to Phase 5 step 2 (report) for this version.
+
+   This guards against TRACKER.md being out of sync with Transistor (e.g. a prior commit failed after publish). The skill's TRACKER check in Phase 1 catches the common case; this catches the rest.
+
 1. **Upload audio**:
    ```
    mcp__transistor__upload_audio(local_path="{output_dir}/{date}-podcast.mp3")
@@ -313,6 +327,27 @@ Skipped entirely when `dry_run=true`.
    ```
 
    Use today's date in `YYYY-MM-DD`. Keep relative paths for portability. A `skipped-no-essential-changes` row still counts as "processed" for dedup — re-running default mode will not re-visit the release.
+
+1.5. **Persist via git (routine / cloud-runner mode only)**. When this skill runs in an Anthropic-managed routine, the sandbox is ephemeral — the TRACKER update must be pushed to `main` or it's lost. When running locally (interactive), skip this step; the user commits manually.
+
+   Detect routine mode by checking the env var `CLAUDE_ROUTINE=1` (set by Routines runtime). If set:
+
+   ```bash
+   git add output/TRACKER.md
+   git add output/claude-code-{version}-brief.md  # only if generated this run (not skipped-no-essential-changes / already-published)
+   git add output/{date}-podcast.md               # only if generated this run
+   # Never `git add` *.mp3 or *-segments/ — gitignored, lives on Transistor.
+
+   git -c user.name="claude-code-release-podcast" \
+       -c user.email="routine@noreply.anthropic.com" \
+       commit -m "podcast: claude-code v{version} ({status})"
+
+   git push origin main
+   ```
+
+   Substitute `{version}`, `{date}`, and `{status}` (one of: `published`, `draft`, `skipped-no-essential-changes`, `already-published`).
+
+   On push failure (non-fast-forward, auth, network): surface the error, do NOT retry destructively, do NOT force-push. The TRACKER write is preserved in the working tree for the next run to commit.
 
 2. **Report to user** in chat:
    - Version just published

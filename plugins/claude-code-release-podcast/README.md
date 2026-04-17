@@ -20,7 +20,7 @@ This skill is an **orchestrator** — it does not produce audio or publish on it
 | Plugin | Required for |
 |--------|--------------|
 | [`podcast-skill`](../podcast-skill/) | Transcript generation + ElevenLabs TTS + audio merging |
-| [`transistor`](../transistor/) | Uploading audio and publishing episodes (needs `TRANSISTOR_API_KEY` in `.env`; the show id is hardcoded in this skill's SKILL.md as configuration, not a secret) |
+| [`transistor`](../transistor/) | Uploading audio and publishing episodes (needs `TRANSISTOR_API_KEY` embedded in the MCP server config via `claude mcp add --env` — see the transistor plugin's README; the show id is hardcoded in this skill's SKILL.md as configuration, not a secret) |
 
 Optional MCP servers used for research:
 - **ElevenLabs MCP** — via podcast-skill (for TTS)

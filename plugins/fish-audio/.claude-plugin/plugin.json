@@ -1,0 +1,11 @@
+{
+  "name": "fish-audio",
+  "version": "1.0.0",
+  "description": "Fish Audio text-to-speech MCP server. Targets the S1 model with inline parenthesis-syntax emotion tags (e.g. (happy), (excited), (whispering)). Writes mp3 segments per request, suitable as a drop-in alternative to ElevenLabs in the podcast-skill pipeline.",
+  "author": {
+    "name": "Andrei Svirida"
+  },
+  "homepage": "https://github.com/andasv/andrei-skill-marketplace",
+  "license": "MIT",
+  "keywords": ["fish-audio", "tts", "text-to-speech", "audio", "emotion", "s1", "mcp"]
+}

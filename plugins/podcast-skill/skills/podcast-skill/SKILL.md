@@ -13,10 +13,11 @@ This skill uses the following MCP servers:
 
 | MCP Server | Purpose | Required Tools |
 |------------|---------|----------------|
-| **ElevenLabs** | Text-to-speech synthesis and audio playback | `mcp__ElevenLabs__text_to_speech`, `mcp__ElevenLabs__play_audio`, `mcp__ElevenLabs__search_voices` |
+| **ElevenLabs** *(default TTS)* | Text-to-speech synthesis and audio playback | `mcp__ElevenLabs__text_to_speech`, `mcp__ElevenLabs__play_audio`, `mcp__ElevenLabs__search_voices` |
+| **Fish Audio** *(alternative TTS — used only when `tts_provider=fish-audio`)* | S1-model TTS with inline emotion tags | `mcp__fish-audio__text_to_speech`, `mcp__fish-audio__list_voices`, `mcp__fish-audio__check_credit`, `mcp__fish-audio__list_supported_tags` |
 | **Transistor** *(optional — only when the user explicitly requests publishing)* | Upload audio and manage episodes on Transistor.fm | `mcp__transistor__upload_audio`, `mcp__transistor__create_episode`, `mcp__transistor__update_episode`, `mcp__transistor__publish_episode`, `mcp__transistor__delete_episode`, `mcp__transistor__get_episode`, `mcp__transistor__list_episodes`, `mcp__transistor__get_show`, `mcp__transistor__update_show` |
 
-The ElevenLabs MCP server handles API authentication internally. The Transistor MCP server reads `TRANSISTOR_API_KEY` and `TRANSISTOR_SHOW_ID` from the repo-root `.env`.
+The ElevenLabs MCP server handles API authentication internally. The Fish Audio and Transistor MCP servers read their API keys from the MCP server config (`~/.claude.json` local scope) — register them once with `claude mcp add --env FISH_AUDIO_API_KEY=… -- python -m fish_audio_mcp` and `claude mcp add --env TRANSISTOR_API_KEY=… -- python -m transistor_mcp`. See each plugin's README for the exact commands. Keys are no longer read from `.env`.
 
 ## Parameters
 
@@ -30,6 +31,7 @@ The user may provide these parameters when invoking the skill. Apply defaults fo
 | `personas_dir` | `personas/defaults/` (relative to this skill) | Directory containing persona .md files |
 | `output_dir` | `./output/` (relative to CWD) | Where to save transcript and audio |
 | `style` | `collaborative` | Podcast style: collaborative, debate, interview |
+| `tts_provider` | `elevenlabs` | TTS backend: `elevenlabs` (default) or `fish-audio`. When `fish-audio`, the transcript is annotated with inline `(emotion)` tags drawn from each persona's `fish_audio_emotion_palette`. |
 
 ## Execution Pipeline
 
@@ -99,6 +101,26 @@ Execute these three phases sequentially. Do not skip phases.
    - `debate`: Take opposing views, challenge each other, productive tension
    - `interview`: Persona 1 asks questions, Persona 2 answers in depth
 
+   **Emotion-tag injection (only when `tts_provider=fish-audio`):**
+   When Fish Audio is the TTS backend, annotate every sentence with an inline emotion tag. Skip this block entirely for `tts_provider=elevenlabs` (default).
+
+   - **Source of truth per host**: each persona file has a `fish_audio_emotion_palette` YAML field — an array of emotion names drawn from the Fish Audio S1 vocabulary (see `mcp__fish-audio__list_supported_tags` or the list at the end of this section). The first entry is the persona's baseline emotion.
+   - **Per-sentence selection**: for every sentence a persona speaks, pick exactly one emotion from *that persona's* palette whose connotation best matches the sentence's beat tone. Examples:
+     - Surprise reveal → `(surprised)` or `(excited)` if in palette
+     - Thoughtful explanation → `(thoughtful)` or `(calm)` if in palette
+     - Empathetic reaction → `(empathetic)` or `(warm)` if in palette
+     - Confident claim → `(confident)` or `(satisfied)` if in palette
+     - No clear valence → fall back to the **first** palette entry (baseline)
+   - **Placement**: prepend the tag to the sentence, inside parentheses, at the very start — Fish Audio S1 requires sentence-initial placement for English. Every sentence gets exactly one tag.
+
+     ```
+     **Alex Chen:** (thoughtful) This release is dense. (curious) What's the first thing you want to dig into?
+     **Sarah Kim:** (delighted) I love that Auto mode is finally flag-free. (confident) That's a meaningful quality-of-life win for Max users.
+     ```
+
+   - **Cross-palette discipline**: never apply an emotion from Sarah's palette to Alex or vice versa — the palettes encode each host's personality. Do not invent emotions outside the palette.
+   - **Supported S1 emotions** (validation reference): `angry, sad, disdainful, excited, surprised, satisfied, unhappy, anxious, hysterical, delighted, scared, worried, indifferent, upset, impatient, nervous, guilty, scornful, frustrated, depressed, embarrassed, jealous, awkward, amused, happy, calm, confident, thoughtful, curious, enthusiastic, warm, friendly, empathetic`. Tone tags like `(whispering)`, `(soft tone)`, `(in a hurry tone)`, `(shouting)` can appear anywhere in a sentence and are *in addition to* the mandatory sentence-initial emotion tag.
+
 6. **Add YAML frontmatter** to the transcript:
    ```yaml
    ---
@@ -109,8 +131,10 @@ Execute these three phases sequentially. Do not skip phases.
      - [persona 2 name]
    duration_target: [X] minutes
    topic: "[selected topic title]"
+   tts_provider: [elevenlabs or fish-audio]
    ---
    ```
+   Include `tts_provider` so the audio phase knows which MCP to route to, and so a reader can tell at a glance whether the transcript is tagged.
 
 7. **Save the transcript** to `{output_dir}/{date}-podcast.md` using the Write tool.
 
@@ -139,11 +163,12 @@ Execute these three phases sequentially. Do not skip phases.
 
 4. **Create segments directory**: `{output_dir}/{date}-segments/` using Bash `mkdir -p`.
 
-5. **Synthesize each turn** sequentially. For each turn:
+5. **Synthesize each turn** sequentially. Route based on `tts_provider`:
 
+   **When `tts_provider=elevenlabs` (default):**
    Call `mcp__ElevenLabs__text_to_speech` with:
    - `text`: the dialogue text (stripped of speaker prefix)
-   - `voice_id`: from the speaker's persona
+   - `voice_id`: from the speaker's persona (`voice_id` field)
    - `model_id`: from the speaker's persona
    - `stability`: from the speaker's persona
    - `similarity_boost`: from the speaker's persona
@@ -152,7 +177,19 @@ Execute these three phases sequentially. Do not skip phases.
    - `output_format`: `mp3_44100_128`
    - `output_directory`: the segments directory
 
-   After each TTS call, rename the output file to `{NNN}_{speaker_name_lowercase}.mp3` where NNN is the zero-padded turn index (001, 002, 003...). This ensures correct merge order.
+   **When `tts_provider=fish-audio`:**
+   First, call `mcp__fish-audio__check_credit` once before the loop. If credit is insufficient for the full transcript (<1 char per sentence × safety margin), stop and surface the error.
+
+   Then for each turn, call `mcp__fish-audio__text_to_speech` with:
+   - `text`: the dialogue text (stripped of speaker prefix) — **keep all `(emotion)` tags intact**; the Fish Audio S1 model reads them as prosody control
+   - `voice_id`: from the speaker's persona (`fish_audio_voice_id` field)
+   - `model`: `"s1"`
+   - `audio_format`: `"mp3"`
+   - `speed`: from the speaker's persona (`fish_audio_speed` field)
+   - `mp3_bitrate`: `128`
+   - `output_directory`: the segments directory
+
+   After each TTS call (regardless of provider), rename the output file to `{NNN}_{speaker_name_lowercase}.mp3` where NNN is the zero-padded turn index (001, 002, 003...). This ensures correct merge order. The file returned by Fish Audio follows the same `tts_<prefix>_<timestamp>.mp3` naming convention as ElevenLabs, so the rename step is identical across providers.
 
 6. **Merge audio segments**: Run the merge script:
    ```bash
@@ -264,6 +301,8 @@ When the user has explicitly asked to publish, execute these steps in order:
 - If no persona files are found in the configured directory, report the error and suggest checking the path.
 - If a persona file is missing `voice_id`, use `mcp__ElevenLabs__search_voices` to find a voice matching the persona's `voice_name` field and update the persona file.
 - If the TTS call fails for a segment, report which segment failed and continue with remaining segments.
+- **Fish Audio quota exhausted (HTTP 402)**: stop the pipeline immediately — partial audio is not useful for a multi-turn podcast. Report the error, list any segments already written, and keep the transcript on disk so the run can resume after top-up. Same contract as ElevenLabs quota failures.
+- **Persona missing Fish Audio fields**: when `tts_provider=fish-audio`, if a persona file lacks `fish_audio_voice_id` or `fish_audio_emotion_palette`, stop and tell the user which file to update — don't try to synthesize with a bad configuration.
 - If the merge script fails, check that pydub is installed (`pip install pydub`) and ffmpeg is available.
 - If the input file cannot be parsed as HTML, treat it as plain text and extract topics from paragraphs.
 
